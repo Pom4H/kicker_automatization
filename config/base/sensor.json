@@ -1,0 +1,26 @@
+{
+  "sensors": [
+    {
+      "point": "RED_GATE",
+      "gpio": 16,
+      "direction": "in",
+      "edge": "falling",
+      "options": {
+        "debounceTimeout": 100,
+        "activeLow": true,
+        "reconfigureDirection": false
+      }
+    },
+    {
+      "point": "BLACK_GATE",
+      "gpio": 17,
+      "direction": "in",
+      "edge": "falling",
+      "options": {
+        "debounceTimeout": 100,
+        "activeLow": true,
+        "reconfigureDirection": false
+      }
+    }
+  ]
+}
