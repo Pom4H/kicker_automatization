@@ -14,7 +14,6 @@
     "tslint": "./node_modules/.bin/tslint 'src/**/*.ts'"
   },
   "dependencies": {
-    "@c7s/http-errors": "git+ssh://git@github.com/c7s/http-errors.git#dev",
     "@types/bull": "3.5.8",
     "@types/express": "4.16.1",
     "@types/lodash": "4.14.123",
