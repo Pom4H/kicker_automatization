@@ -1,41 +1,32 @@
-import { GameRules } from './GameRules';
 import { GameStatus } from './GameStatus';
 import { Goal } from './Goal';
 import { Team } from './Team';
 
 class Game {
-  private id: number;
-  private gameRules: GameRules;
-  private goals: Goal[];
-  private status: GameStatus;
+  public readonly id: number;
+  private _status: GameStatus;
+  private readonly goals: Map<Team, Goal[]>;
 
-  constructor(id: number, gameRules?: GameRules) {
+  constructor(id: number) {
     this.id = id;
-    this.gameRules = gameRules || { goalsToWin: 10 };
-    this.goals = [];
-    this.status = GameStatus.READY;
+    this.goals = new Map<Team, Goal[]>();
+    this._status = GameStatus.READY;
   }
 
-  public scoreGoal(team: Team) {
+  public scoreGoal(team: Team): number {
     const goal = new Goal(team);
-    this.goals.push(goal);
+    const teamGoals = this.goals.get(team) || [];
+    teamGoals.push(goal);
+    this.goals.set(team, teamGoals);
+    return teamGoals.length;
   }
 
-  public checkStatus(): GameStatus {
-    const redTeamScore = this.goals.filter(goal => goal.team === Team.RED).length;
-    const blackTeamScore = this.goals.filter(goal => goal.team === Team.BLACK).length;
-    if (redTeamScore >= this.gameRules.goalsToWin, blackTeamScore >= this.gameRules.goalsToWin) {
-      this.status = GameStatus.FINISHED;
-    }
-    return this.status;
+  set status(status: GameStatus) {
+    this._status = status;
   }
 
-  set setStatus(status: GameStatus) {
-    this.status = status;
-  }
-
-  get getStatus() {
-    return this.status;
+  get status(): GameStatus {
+    return this._status;
   }
 }
 

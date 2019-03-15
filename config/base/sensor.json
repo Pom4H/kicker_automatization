@@ -1,7 +1,7 @@
 {
   "sensors": [
     {
-      "point": "RED_GATE",
+      "point": "RED_GATES",
       "gpio": 16,
       "direction": "in",
       "edge": "falling",
@@ -12,7 +12,7 @@
       }
     },
     {
-      "point": "BLACK_GATE",
+      "point": "BLACK_GATES",
       "gpio": 17,
       "direction": "in",
       "edge": "falling",

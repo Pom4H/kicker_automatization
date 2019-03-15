@@ -1,6 +1,6 @@
 import { Team } from './Team';
 
-export class Goal {
+class Goal {
   public team: Team;
   public time: Date;
 
@@ -9,3 +9,5 @@ export class Goal {
     this.time = new Date();
   }
 }
+
+export { Goal };
