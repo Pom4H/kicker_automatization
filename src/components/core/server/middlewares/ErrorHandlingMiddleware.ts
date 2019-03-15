@@ -1,15 +1,9 @@
 import { ILogger } from '../../log/ILogger';
 import { Request, Response, NextFunction } from 'express';
-import { Middleware, HttpError, ExpressErrorMiddlewareInterface } from 'routing-controllers';
-import { ValidationError } from 'class-validator';
-import {
-  HttpError as CoreHttpError,
-  NotFoundError,
+import { Middleware, HttpError, ExpressErrorMiddlewareInterface, NotFoundError,
   InternalServerError,
-  ClassValidatorError,
-  BadRequestError,
-  EntityTooLargeError,
-} from '@c7s/http-errors';
+  BadRequestError } from 'routing-controllers';
+
 import { inject, Type } from '../../di';
 
 enum HttpCode {
@@ -43,7 +37,7 @@ export class ErrorHandlingMiddleware implements ExpressErrorMiddlewareInterface 
     const extractedError = this.extractError(error);
     this.logError(extractedError);
 
-    const coreHttpError = (extractedError instanceof CoreHttpError)
+    const coreHttpError = (extractedError instanceof HttpError)
       ? extractedError
       : this.createCoreHttpError(extractedError);
 
@@ -51,7 +45,7 @@ export class ErrorHandlingMiddleware implements ExpressErrorMiddlewareInterface 
     let data: any;
     if (coreHttpError) {
       code = this.identifyHttpCode(coreHttpError);
-      data = coreHttpError.data;
+      data = coreHttpError.httpCode;
     } else {
       code = this.identifyHttpCode(extractedError);
       data = extractedError;
@@ -75,16 +69,13 @@ export class ErrorHandlingMiddleware implements ExpressErrorMiddlewareInterface 
       : this.logger.error(error as any);
   }
 
-  protected createCoreHttpError(error: Error): CoreHttpError | null {
+  protected createCoreHttpError(error: Error): HttpError | null {
     let result = null;
     const code = this.identifyHttpCode(error);
 
     switch (code) {
       case HttpCode.BadRequest:
-        const errors = (error as any).errors;
-        result = errors
-          ? this.createValidationError(errors, (error as any).paramName)
-          : new BadRequestError(error.message);
+        result = new BadRequestError(error.message);
         break;
 
       case HttpCode.NotFound:
@@ -98,11 +89,11 @@ export class ErrorHandlingMiddleware implements ExpressErrorMiddlewareInterface 
       case HttpCode.EntityTooLarge:
         const bodyParserError = error as any as BodyParserError;
         if (undefined !== bodyParserError.limit && undefined !== bodyParserError.length) {
-          result = new EntityTooLargeError(
+          result = new NotFoundError(
             `${error.message} (request ${bodyParserError.length}, limit ${bodyParserError.limit})`,
           );
         } else {
-          result = new EntityTooLargeError(error.message);
+          result = new NotFoundError(error.message);
         }
         break;
 
@@ -115,16 +106,12 @@ export class ErrorHandlingMiddleware implements ExpressErrorMiddlewareInterface 
     let code = HttpCode.InternalServer;
     if (error instanceof HttpError) {
       code = error.httpCode;
-    } else if (error instanceof CoreHttpError) {
-      code = error.code;
+    } else if (error instanceof HttpError) {
+      code = error.httpCode as HttpCode;
     } else if (undefined !== (error as any as BodyParserError).status) {
       code = (error as any as BodyParserError).status;
     }
     return code;
-  }
-
-  protected createValidationError(errors: ValidationError[], envelopeName: string) {
-    return new ClassValidatorError(errors, envelopeName);
   }
 
 }

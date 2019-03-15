@@ -5,7 +5,7 @@ import { Logger } from 'pino';
 import { Point } from '../point/point';
 
 import { ISensorService } from '../../inf/sensor/ISensorService';
-import { StatsServiceWrapper } from '../../inf/wrappers/StatsServiceWrapper';
+// import { StatsServiceWrapper } from '../../inf/wrappers/StatsServiceWrapper';
 
 import { RedGates, BlackGates } from './Gates';
 import { GoalAction } from './GoalAction';
@@ -18,7 +18,7 @@ class GameManager {
   @di.inject(Type.AppLogger) private logger!: Logger;
   @di.inject(Type.SensorService) private sensorService!: ISensorService;
 
-  private statsService: StatsServiceWrapper;
+  // private statsService: StatsServiceWrapper;
 
   private redGates: RedGates;
   private blackGates: BlackGates;
@@ -26,7 +26,7 @@ class GameManager {
   private gameRules: GameRules;
 
   constructor() {
-    this.statsService = new StatsServiceWrapper();
+    // this.statsService = new StatsServiceWrapper();
     [this.redGates, this.blackGates] = this.spawnGates();
     this.gameRules = { goalsToWin: 10 };
   }
