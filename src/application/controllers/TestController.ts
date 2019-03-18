@@ -13,7 +13,7 @@ export class UserActivityController {
 
   @OnUndefined(204)
   @Post('/goal')
-  public startGame(@Body() gameData: { point: Point }): void {
+  public testGoal(@Body() gameData: { point: Point }): void {
     this.logger.warn(`Init test goal to point: ${gameData.point}`);
     this.sensorService.callPoint(gameData.point);
   }

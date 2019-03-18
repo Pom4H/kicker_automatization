@@ -10,7 +10,7 @@ import { StatsServiceWrapper } from '../../inf/wrappers/StatsServiceWrapper';
 import { GoalAction } from './GoalAction';
 import { RedGates, BlackGates } from './Gates';
 
-import { Game, GameStatus, GameRules, Team, Goal } from '../../domain/game';
+import { Game, GameStatus, GameRules, Team } from '../../domain/game';
 import { GameIsAlreadyExistError, GameIsNotExistError, GameIsNotOverError } from '../../domain/error';
 
 class GameManager {
@@ -60,35 +60,6 @@ class GameManager {
     } else {
       throw new GameIsNotExistError('There are no started games!');
     }
-  }
-
-  public pauseGame(gameId: number) {
-    if (this.game) {
-      if (this.game.id === gameId) {
-        this.game.status === GameStatus.PAUSED;
-        const stats = this.game.showStats();
-        delete this.game;
-        return stats;
-      } 
-      throw new GameIsNotExistError(`There are no games with ${gameId} id!`);
-    } else {
-      throw new GameIsNotExistError('There are no started games!');
-    }
-  }
-
-  public resumeGame(gameId: number, gameRules: GameRules, goals: Goal[], playTime: number): void | never {
-    if (this.game) {
-      throw new GameIsNotOverError(`Current game: ${this.game.id} is not over!`);
-    }
-    if (gameRules) {
-      this.gameRules = gameRules;
-    }
-    const redTeamGoals = goals.filter(goal => goal.team === Team.RED);
-    const blackTeamGoals = goals.filter(goal => goal.team === Team.BLACK);
-    const goalsMap = new Map<Team, Goal[]>();
-    goalsMap.set(Team.RED, redTeamGoals);
-    goalsMap.set(Team.BLACK, blackTeamGoals);
-    this.game = new Game(gameId, goalsMap, playTime);
   }
 
   private spawnGates(): [RedGates, BlackGates] {

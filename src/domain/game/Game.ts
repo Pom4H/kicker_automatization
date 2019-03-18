@@ -5,21 +5,13 @@ import { GameStats } from './GameStats';
 
 class Game {
   public readonly id: number;
-  public playTime: number;
   private readonly goals: Map<Team, Goal[]>;
   private _status: GameStatus;
 
-  constructor(id: number, goals?: Map<Team, Goal[]>, playTime?: number) {
+  constructor(id: number, goals?: Map<Team, Goal[]>) {
     this.id = id;
     this.goals = goals || new Map<Team, Goal[]>();
-    this.playTime = playTime || 0;
     this._status = GameStatus.READY;
-
-    setInterval(() => {
-      if (this._status === GameStatus.INPROCESS) {
-        this.playTime += 1;
-      }
-    }, 1000);
   }
 
   public scoreGoal(team: Team): number {
@@ -34,7 +26,7 @@ class Game {
     const redTeamGoals = this.goals.get(Team.RED) || [];
     const blackTeamGoals = this.goals.get(Team.BLACK) || [];
     const goals = [...redTeamGoals, ...blackTeamGoals];
-    return new GameStats(this.id, goals, this._status, this.playTime);
+    return new GameStats(this.id, goals, this._status);
   }
 
   set status(status: GameStatus) {
