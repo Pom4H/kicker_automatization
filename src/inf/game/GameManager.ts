@@ -55,8 +55,9 @@ class GameManager {
     if (this.game) {
       if (this.game.id === gameId) {
         delete this.game;
-      } 
-      throw new GameIsNotExistError(`There are no games with ${gameId} id!`);
+      } else {
+        throw new GameIsNotExistError(`There are no games with ${gameId} id!`);
+      }
     } else {
       throw new GameIsNotExistError('There are no started games!');
     }
