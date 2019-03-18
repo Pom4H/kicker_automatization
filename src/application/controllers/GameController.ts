@@ -1,9 +1,11 @@
-import { JsonController, Post, OnUndefined, Body } from 'routing-controllers';
+import { JsonController, Post, Body, OnUndefined } from 'routing-controllers';
 import { di } from '@framework';
 import { Type } from '@diType';
 import { Logger } from 'pino';
 
 import { GameManager } from '../../inf/game/GameManager';
+
+import { GameRules, Goal } from '../../domain/game';
 
 @JsonController('/api')
 export class UserActivityController {
@@ -15,16 +17,41 @@ export class UserActivityController {
     this.gameManager = new GameManager();
   }
 
-  @Post('/start')
   @OnUndefined(204)
-  public async startGame(@Body() gameData: { id: number }): Promise<void> {
-    this.gameManager.createNewGame(gameData.id);
-    this.logger.info('Start Game!');
+  @Post('/start')
+  public startGame(@Body() gameData: { gameId: number; gameRules: GameRules }): void {
+    const { gameId, gameRules } = gameData;
+    this.logger.info(`Start game: ${gameId}`);
+    this.gameManager.createNewGame(gameId, gameRules);
   }
 
-  @Post('/stop')
   @OnUndefined(204)
-  public async stopGame(): Promise<void> {
-    this.logger.info('Stop Game!');
+  @Post('/stop')
+  public stopGame(@Body() gameData: { gameId: number }): void {
+    const { gameId } = gameData;
+    this.logger.info(`Stop game: ${gameId}`);
+    this.gameManager.stopGame(gameId);
+  }
+
+  @OnUndefined(204)
+  @Post('/pause')
+  public pauseGame(@Body() gameData: { gameId: number }): void {
+    const { gameId } = gameData;
+    this.logger.info(`Pause game: ${gameId}`);
+    this.gameManager.pauseGame(gameId);
+  }
+
+  @OnUndefined(204)
+  @Post('/resume')
+  public resumeGame(@Body()
+  gameData: {
+    gameId: number;
+    gameRules: GameRules;
+    goals: Goal[];
+    playTime: number;
+  }): void {
+    const { gameId, gameRules, goals, playTime } = gameData;
+    this.gameManager.resumeGame(gameId, gameRules, goals, playTime);
+    this.logger.info(`Resume game: ${gameId}`);
   }
 }

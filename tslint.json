@@ -1,6 +1,7 @@
 {
   "extends": ["tslint-config-airbnb"],
   "rules": {
+    "align": [true, "parameters", "statements"],
     "member-access": true,
     "member-ordering": [
       true,
