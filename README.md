@@ -1,2 +1,2 @@
 # kicker_automatization
-Kicker automatization. Typescript, Node js,
+Kicker automatization. Typescript, Node js

@@ -1,0 +1,10 @@
+{
+    "application": {
+      "level": "info",
+      "name": "application"
+    },
+    "access": {
+      "level": "info",
+      "name": "access"
+    }
+}
