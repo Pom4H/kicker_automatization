@@ -12,9 +12,9 @@ export class UserActivityController {
   @di.inject(Type.SensorService) private sensorService!: DummySensorService;
 
   @OnUndefined(204)
-  @Post('/goal')
-  public testGoal(@Body() gameData: { point: Point }): void {
-    this.logger.warn(`Init test goal to point: ${gameData.point}`);
-    this.sensorService.callPoint(gameData.point);
+  @Post('/point')
+  public callPoint(@Body() observation: { point: Point }): void {
+    this.logger.warn(`Call point: ${observation.point}`);
+    this.sensorService.callPoint(observation.point);
   }
 }
