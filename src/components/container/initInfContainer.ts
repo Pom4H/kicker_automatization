@@ -9,6 +9,7 @@ import { ServiceDiscovery } from '../restClient/ServiceDiscovery';
 
 import { ISensorService } from '../../inf/sensor/ISensorService';
 import { SensorService } from '../../inf/sensor/SensorService';
+import { DummySensorService } from '../../inf/sensor/DummySensorService';
 
 export async function initInfContainer(container: Container, options: { envName: string }): Promise<void> {
   const envChecker = new EnvironmentChecker(process.env[options.envName] as string);
@@ -20,7 +21,11 @@ export async function initInfContainer(container: Container, options: { envName:
     .bind<IServiceDiscovery>(Type.ServiceDiscovery)
     .toConstantValue(new ServiceDiscovery(configFactory.create(ServicesConfig) as any));
 
+  envChecker.isProd() ?
   container
     .bind<ISensorService>(Type.SensorService)
-    .toConstantValue(new SensorService(configFactory.create(SensorListConfig)));
+    .toConstantValue(new SensorService(configFactory.create(SensorListConfig))) :
+  container
+    .bind<ISensorService>(Type.SensorService)
+    .toConstantValue(new DummySensorService());
 }
