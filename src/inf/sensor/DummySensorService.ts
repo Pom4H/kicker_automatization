@@ -16,7 +16,7 @@ class DummySensorService implements ISensorService {
     return sensor;
   }
 
-  public callPoint(point: Point) {
+  public callPoint(point: Point): void {
     const sensor: any = this.sensorMap.get(point);
     if (sensor && sensor.listener) {
       sensor.call();

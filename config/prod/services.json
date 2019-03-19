@@ -1,4 +1,4 @@
 {
-    "statsApi": "http://kicker.lan:3003",
-    "statsToken": "kickass"
+  "statsApi": "http://kicker.lan:3003",
+  "statsToken": "kickass"
 }
