@@ -15,7 +15,7 @@
   ],
   "deploy": {
     "production": {
-      "key": "$HOME/.ssh",
+      "key": "$HOME/.ssh/id_rsa.pub",
       "user": "pi",
       "host": ["192.168.9.112"],
       "ssh_options": "StrictHostKeyChecking=no",
