@@ -2,12 +2,6 @@
 # yarn lockfile v1
 
 
-"@c7s/http-errors@git+ssh://git@github.com/c7s/http-errors.git#dev":
-  version "0.0.1"
-  resolved "git+ssh://git@github.com/c7s/http-errors.git#529bd3e8a947ed3ba0bddf5a01c2a59761e5f538"
-  dependencies:
-    class-validator "^0.8.1"
-
 "@fimbul/bifrost@^0.17.0":
   version "0.17.0"
   resolved "https://registry.yarnpkg.com/@fimbul/bifrost/-/bifrost-0.17.0.tgz#f0383ba7e40992e3193dc87e2ddfde2ad62a9cf4"
