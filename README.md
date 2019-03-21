@@ -1,2 +1,7 @@
 # kicker_automatization
-Kicker automatization. Typescript, Node js
+
+export KICKER_ENV=dev
+
+yarn compile
+
+yarn start
