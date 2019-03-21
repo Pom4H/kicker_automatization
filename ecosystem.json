@@ -1,0 +1,31 @@
+{
+  "apps": [
+    {
+      "name": "app",
+      "script": "dist/app.js",
+      "env": {
+        "NODE_ENV": "dev",
+        "KICKER_ENV": "dev"
+      },
+      "env_production": {
+        "NODE_ENV": "prod",
+        "KICKER_ENV": "prod"
+      }
+    }
+  ],
+  "deploy": {
+    "production": {
+      "key": "$HOME/.ssh",
+      "user": "pi",
+      "host": ["192.168.9.112"],
+      "ssh_options": "StrictHostKeyChecking=no",
+      "ref": "origin/master",
+      "repo": "git@github.com:observation-point/kicker_automatization.git",
+      "path": "/home/pi/projects/kicker_automatization",
+      "pre-setup": "apt-get install git",
+      "post-setup": "yarn ; yarn compile",
+      "pre-deploy-local": "echo 'This is a local executed command'",
+      "post-deploy": "touch post_deploy.txt"
+    }
+  }
+}
