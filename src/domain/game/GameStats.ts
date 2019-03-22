@@ -5,13 +5,11 @@ class GameStats {
   public id: number;
   public goals: Goal[];
   public status: GameStatus;
-  public playTime: number;
 
-  constructor(id: number, goals: Goal[], status: GameStatus, playTime: number) {
+  constructor(id: number, goals: Goal[], status: GameStatus) {
     this.id = id;
     this.goals = goals;
     this.status = status;
-    this.playTime = playTime;
   }
 }
 

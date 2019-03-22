@@ -122,8 +122,8 @@ class GameManager {
 
   private gameOver() {
     if (this.game) {
-      this.redGates.unwatch();
-      this.blackGates.unwatch();
+      this.redGates.unwatchAll();
+      this.blackGates.unwatchAll();
       this.logger.info(`Game: ${this.game.id} is over!`);
       delete this.game;
     }

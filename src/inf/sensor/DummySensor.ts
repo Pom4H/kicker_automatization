@@ -11,6 +11,10 @@ class DummySensor implements Sensor {
     delete this.listener;
   }
 
+  public unwatchAll(): void {
+    delete this.listener;
+  }
+
   public call(): void {
     this.listener();
   }

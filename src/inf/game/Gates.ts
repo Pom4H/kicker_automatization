@@ -2,7 +2,8 @@ import { GoalAction } from './GoalAction';
 
 interface Gates {
   watch(action: GoalAction): void;
-  unwatch(): void;
+  unwatch(action?: GoalAction): void;
+  unwatchAll(): void;
 }
 
 interface RedGates extends Gates {}
