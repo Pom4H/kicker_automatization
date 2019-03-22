@@ -15,14 +15,14 @@
   ],
   "deploy": {
     "production": {
-      "key": "$HOME/.ssh/id_rsa.pub",
+      "key": "~/.ssh/id_rsa",
       "user": "pi",
       "host": ["192.168.9.112"],
       "ssh_options": "StrictHostKeyChecking=no",
       "ref": "origin/master",
       "repo": "git@github.com:observation-point/kicker_automatization.git",
       "path": "/home/pi/projects/kicker_automatization",
-      "pre-setup": "apt-get install git",
+      "pre-setup": "cat ~/.ssh/id_rsa.pub",
       "post-setup": "yarn ; yarn compile",
       "pre-deploy-local": "echo 'This is a local executed command'",
       "post-deploy": "touch post_deploy.txt"
