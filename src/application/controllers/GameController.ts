@@ -5,7 +5,7 @@ import { Logger } from 'pino';
 
 import { GameManager } from '../../inf/game/GameManager';
 
-import { GameRules, Goal } from '../../domain/game';
+import { GameRules } from '../../domain/game';
 
 @JsonController('/api')
 export class UserActivityController {
@@ -31,27 +31,5 @@ export class UserActivityController {
     const { gameId } = gameData;
     this.logger.info(`Stop game: ${gameId}`);
     this.gameManager.stopGame(gameId);
-  }
-
-  @OnUndefined(204)
-  @Post('/pause')
-  public pauseGame(@Body() gameData: { gameId: number }): void {
-    const { gameId } = gameData;
-    this.logger.info(`Pause game: ${gameId}`);
-    this.gameManager.pauseGame(gameId);
-  }
-
-  @OnUndefined(204)
-  @Post('/resume')
-  public resumeGame(@Body()
-  gameData: {
-    gameId: number;
-    gameRules: GameRules;
-    goals: Goal[];
-    playTime: number;
-  }): void {
-    const { gameId, gameRules, goals, playTime } = gameData;
-    this.gameManager.resumeGame(gameId, gameRules, goals, playTime);
-    this.logger.info(`Resume game: ${gameId}`);
   }
 }
