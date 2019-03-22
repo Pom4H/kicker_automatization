@@ -25,7 +25,7 @@
       "pre-setup": "echo 'PRE SETUP'",
       "post-setup": "echo 'POST SETUP'",
       "pre-deploy-local": "echo 'This is a local executed command'",
-      "post-deploy": "yarn && yarn compile && pm2 start ecosystem.json"
+      "post-deploy": "yarn && yarn compile && pm2 start ecosystem.json --env prod"
     }
   }
 }
