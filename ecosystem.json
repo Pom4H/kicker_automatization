@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "app",
+      "name": "kicker",
       "script": "dist/app.js",
       "env": {
         "NODE_ENV": "dev",
