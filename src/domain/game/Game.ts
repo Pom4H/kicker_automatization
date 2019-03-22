@@ -2,24 +2,19 @@ import { GameStatus } from './GameStatus';
 import { Goal } from './Goal';
 import { Team } from './Team';
 import { GameStats } from './GameStats';
+import { RedGates, BlackGates } from '../../inf/game/Gates';
 
 class Game {
   public readonly id: number;
-  public playTime: number;
   private readonly goals: Map<Team, Goal[]>;
   private _status: GameStatus;
+  private gates: [RedGates, BlackGates];
 
-  constructor(id: number, goals?: Map<Team, Goal[]>, playTime?: number) {
+  constructor(id: number, gates: [RedGates, BlackGates], goals?: Map<Team, Goal[]>) {
     this.id = id;
+    this.gates = gates;
     this.goals = goals || new Map<Team, Goal[]>();
-    this.playTime = playTime || 0;
     this._status = GameStatus.READY;
-
-    setInterval(() => {
-      if (this._status === GameStatus.INPROCESS) {
-        this.playTime += 1;
-      }
-    }, 1000);
   }
 
   public scoreGoal(team: Team): number {
@@ -43,6 +38,10 @@ class Game {
 
   get status(): GameStatus {
     return this._status;
+  }
+
+  public unwatch(): void {
+    this.gates.forEach(gate => gate.unwatch());
   }
 }
 

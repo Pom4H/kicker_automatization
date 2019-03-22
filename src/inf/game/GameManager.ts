@@ -21,9 +21,6 @@ class GameManager {
 
   private statsService: StatsServiceWrapper;
 
-  private redGates: RedGates | undefined;
-  private blackGates: BlackGates | undefined;
-
   private gameRules: GameRules;
 
   constructor() {
@@ -41,11 +38,13 @@ class GameManager {
     if (gameRules) {
       this.gameRules = gameRules;
     }
-    this.game = new Game(gameId);
+    
+    const gates = this.spawnGates();
+    
+    gates[0].watch(this.makeGoalHandler(Team.BLACK));
+    gates[1].watch(this.makeGoalHandler(Team.RED));
 
-    [this.redGates, this.blackGates] = this.spawnGates();
-    this.redGates.watch(this.makeGoalHandler(Team.BLACK));
-    this.blackGates.watch(this.makeGoalHandler(Team.RED));
+    this.game = new Game(gameId, gates);
 
     this.game.status = GameStatus.INPROCESS;
     this.logger.info(`Game: ${gameId} started!`);
@@ -93,9 +92,8 @@ class GameManager {
 
   private gameOver() {
     if (this.game) {
+      this.game.unwatch();
       this.logger.info(`Game: ${this.game.id} is over!`);
-      delete this.redGates;
-      delete this.blackGates;
       delete this.game;
     }
   }
