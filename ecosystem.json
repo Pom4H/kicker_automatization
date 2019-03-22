@@ -7,14 +7,14 @@
         "NODE_ENV": "dev",
         "KICKER_ENV": "dev"
       },
-      "env_production": {
+      "env_prod": {
         "NODE_ENV": "prod",
         "KICKER_ENV": "prod"
       }
     }
   ],
   "deploy": {
-    "production": {
+    "prod": {
       "key": "~/.ssh/id_rsa",
       "user": "pi",
       "host": ["192.168.9.112"],
@@ -22,10 +22,10 @@
       "ref": "origin/master",
       "repo": "git@github.com:observation-point/kicker_automatization.git",
       "path": "/home/pi/projects/kicker_automatization",
-      "pre-setup": "cat ~/.ssh/id_rsa.pub",
-      "post-setup": "yarn ; yarn compile",
+      "pre-setup": "echo 'PRE SETUP'",
+      "post-setup": "echo 'POST SETUP'",
       "pre-deploy-local": "echo 'This is a local executed command'",
-      "post-deploy": "touch post_deploy.txt"
+      "post-deploy": "yarn && yarn compile && pm2 start ecosystem.json"
     }
   }
 }

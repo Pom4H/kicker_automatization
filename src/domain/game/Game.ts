@@ -34,7 +34,7 @@ class Game {
     const redTeamGoals = this.goals.get(Team.RED) || [];
     const blackTeamGoals = this.goals.get(Team.BLACK) || [];
     const goals = [...redTeamGoals, ...blackTeamGoals];
-    return new GameStats(this.id, goals, this._status, this.playTime);
+    return new GameStats(this.id, goals, this._status);
   }
 
   set status(status: GameStatus) {
