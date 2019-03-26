@@ -4,11 +4,11 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class ServiceDiscovery extends Config {
   @IsNotEmpty()
   @IsString()
-  public statsApi!: string;
+  public api!: string;
 
   @IsNotEmpty()
   @IsString()
-  public statsToken!: string;
+  public token!: string;
 
   public getName(): string {
     return 'services';
