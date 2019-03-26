@@ -1,4 +1,4 @@
 {
-    "statsApi": "http://localhost.lan:3003",
-    "statsToken": "kickass"
+  "api": "http://localhost.lan:3003",
+  "token": "kickass"
 }

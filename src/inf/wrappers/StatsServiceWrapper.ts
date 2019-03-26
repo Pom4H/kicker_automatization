@@ -7,7 +7,10 @@ export class StatsServiceWrapper extends ServiceWrapper {
   }
 
   protected get serviceName(): string {
-    return 'statsApi';
+    return 'api';
   }
 
+  protected get serviceToken(): string {
+    return 'token';
+  }
 }

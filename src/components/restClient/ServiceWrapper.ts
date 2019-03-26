@@ -11,13 +11,15 @@ export abstract class ServiceWrapper {
   protected serviceDiscovery!: IServiceDiscovery;
 
   protected serviceUrl: string | undefined;
+  protected serviceToken: string | undefined;
 
   constructor() {
     this.serviceUrl = this.serviceDiscovery.location(this!.serviceName);
+    this.serviceToken = this.serviceDiscovery.location(this!.serviceToken!);
     if (!this.serviceUrl) {
       throw new Error(`Can't find service location for ${this!.serviceName}`);
     }
-    this.restClient = new RestClient(this.serviceUrl);
+    this.restClient = new RestClient(this.serviceUrl, { Authorization: `Bearer ${this.serviceToken}` });
   }
 
     /**

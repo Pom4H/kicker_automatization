@@ -17,7 +17,7 @@
     "prod": {
       "key": "~/.ssh/id_rsa",
       "user": "pi",
-      "host": ["192.168.9.112"],
+      "host": ["192.168.9.76"],
       "ssh_options": "StrictHostKeyChecking=no",
       "ref": "origin/master",
       "repo": "git@github.com:observation-point/kicker_automatization.git",
