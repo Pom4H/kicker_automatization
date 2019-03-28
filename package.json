@@ -11,7 +11,8 @@
     "start-dev": "bin/environment node_modules/.bin/nodemon dist/app.js | pino-pretty -c -t",
     "compile": "rm -rf dist && ./node_modules/.bin/tsc",
     "compile-dev": "rm -rf dist && ./node_modules/.bin/tsc --watch",
-    "tslint": "./node_modules/.bin/tslint 'src/**/*.ts'"
+    "tslint": "./node_modules/.bin/tslint 'src/**/*.ts'",
+    "deploy": "pm2 deploy ecosystem.json prod"
   },
   "dependencies": {
     "@types/bull": "3.5.8",
