@@ -1,4 +1,4 @@
 {
-  "api": "http://localhost.lan:3003",
+  "api": "http://localhost:8888/api",
   "token": "kickass"
 }
