@@ -53,7 +53,10 @@ class GameManager {
   public stopGame(gameId: number): void | never {
     if (this.game) {
       if (this.game.id === gameId) {
+        this.game.status = GameStatus.CANCELED;
+        this.game.unwatch();
         delete this.game;
+        this.logger.warn(`Game: ${gameId} is canceled!`);
       } else {
         throw new GameIsNotExistError(`There are no games with ${gameId} id!`);
       }
