@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "kicker",
-      "script": "dist/app.js",
+      "script": "dist/app.js |  ~/.yarn/bin/pino-pretty -t -c",
       "env": {
         "NODE_ENV": "dev",
         "KICKER_ENV": "dev"
@@ -10,7 +10,8 @@
       "env_prod": {
         "NODE_ENV": "prod",
         "KICKER_ENV": "prod"
-      }
+      },
+      "watch": true
     }
   ],
   "deploy": {
