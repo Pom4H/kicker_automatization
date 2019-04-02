@@ -41,8 +41,8 @@ class GameManager {
     
     const gates = this.spawnGates();
     
-    gates[0].watch(this.makeGoalHandler(Team.BLACK));
-    gates[1].watch(this.makeGoalHandler(Team.RED));
+    gates[0].watch(this.makeGoalHandler(gameId, Team.BLACK));
+    gates[1].watch(this.makeGoalHandler(gameId, Team.RED));
 
     this.game = new Game(gameId, gates);
 
@@ -71,15 +71,15 @@ class GameManager {
     return [redGates, blackGates];
   }
 
-  private makeGoalHandler(team: Team): GoalAction {
+  private makeGoalHandler(gameId: number, team: Team): GoalAction {
     return (err, _value) => {
       if (err) {
         throw err;
       }
-      if (this.game && this.game.status === GameStatus.INPROCESS) {
+      if (this.game && this.game.id === gameId && this.game.status === GameStatus.INPROCESS) {
         const score = this.game.scoreGoal(team);
 
-        this.logger.info(`GAME[${this.game.id}] SCORE: [${team}] - ${score}`);
+        this.logger.info(`GAME[${gameId}] SCORE: [${team}] - ${score}`);
 
         if (score >= this.gameRules.goalsToWin) {
           this.game.status = GameStatus.FINISHED;
@@ -89,7 +89,7 @@ class GameManager {
           this.statsService.sendStats(this.game.showStats());
         }
       } else {
-        this.logger.warn(`Not counted goal by ${team} team!`);
+        this.logger.warn(`GAME[${gameId}] Not counted goal by ${team} team!`);
       }
     };
   }
