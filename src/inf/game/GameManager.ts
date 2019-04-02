@@ -80,7 +80,7 @@ class GameManager {
       }
       if (firstDetectionTime) {
         secondDetectionTime = Date.now();
-        if (secondDetectionTime - firstDetectionTime < 10) {
+        if (secondDetectionTime - firstDetectionTime > 10) {
           firstDetectionTime = 0;
           if (this.game && this.game.id === gameId && this.game.status === GameStatus.INPROCESS) {
             const score = this.game.scoreGoal(team);
