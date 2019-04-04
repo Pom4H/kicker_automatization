@@ -45,10 +45,10 @@ class ConfigSource {
   }
 
   public print(): void {
-    console.log(`Env: ${this.environment}`);
+    console.info(`Env: ${this.environment}`);
     [...this.fullConfig].forEach((config) => {
       try {
-        console.log(JSON.stringify(config[1], null, 2));
+        console.info(JSON.stringify(config[1], null, 2));
       } catch (error) {
         console.error(`Error: Config parse error - ${config[0]}`);
       }

@@ -30,9 +30,12 @@ class GameManager {
 
   public async init() {
     const gameState = await this.statsService.getGameState();
-    if (gameState) {
+    if (gameState && gameState.status === GameStatus.INPROCESS) {
       this.restoreGameState(gameState);
+      this.logger.info(`game with id ${gameState.id} restored`);
     }
+
+    return this;
   }
 
   public createNewGame(gameId: number, gameRules: GameRules): void | never {
@@ -130,6 +133,10 @@ class GameManager {
     goalsMap.set(Team.BLACK, blackGoals);
 
     const gates = this.spawnGates();
+    
+    gates[0].watch(this.makeGoalHandler(id, Team.BLACK));
+    gates[1].watch(this.makeGoalHandler(id, Team.RED));
+    
     this.game = new Game(id, gates, goalsMap);
   }
 }

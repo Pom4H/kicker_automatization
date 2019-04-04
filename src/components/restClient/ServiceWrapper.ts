@@ -30,7 +30,7 @@ export abstract class ServiceWrapper {
      * @param {object} query
      * @returns {Promise<Response>}
      */
-  public async get<Response>(url: string, query?: object): Promise<Response> {
+  public async get<Response>(url: string, query: object = {}): Promise<Response> {
     return this.restClient.get<Response>(url, query);
   }
 

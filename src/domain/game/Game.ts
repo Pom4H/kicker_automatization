@@ -14,7 +14,7 @@ class Game {
     this.id = id;
     this.gates = gates;
     this.goals = goals || new Map<Team, Goal[]>();
-    this._status = GameStatus.READY;
+    this._status = GameStatus.INPROCESS;
   }
 
   public scoreGoal(team: Team): number {
