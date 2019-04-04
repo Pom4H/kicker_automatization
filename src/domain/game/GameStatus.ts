@@ -1,6 +1,6 @@
 export enum GameStatus {
   READY = 'ready',
   INPROCESS = 'inprocess',
-  PAUSED = 'paused',
+  CANCELED = 'canceled',
   FINISHED = 'finished'
 }

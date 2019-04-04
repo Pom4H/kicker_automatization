@@ -41,8 +41,8 @@ class GameManager {
     
     const gates = this.spawnGates();
     
-    gates[0].watch(this.makeGoalHandler(Team.BLACK));
-    gates[1].watch(this.makeGoalHandler(Team.RED));
+    gates[0].watch(this.makeGoalHandler(gameId, Team.BLACK));
+    gates[1].watch(this.makeGoalHandler(gameId, Team.RED));
 
     this.game = new Game(gameId, gates);
 
@@ -53,7 +53,10 @@ class GameManager {
   public stopGame(gameId: number): void | never {
     if (this.game) {
       if (this.game.id === gameId) {
+        this.game.status = GameStatus.CANCELED;
+        this.game.unwatch();
         delete this.game;
+        this.logger.warn(`Game: ${gameId} is canceled!`);
       } else {
         throw new GameIsNotExistError(`There are no games with ${gameId} id!`);
       }
@@ -68,25 +71,35 @@ class GameManager {
     return [redGates, blackGates];
   }
 
-  private makeGoalHandler(team: Team): GoalAction {
+  private makeGoalHandler(gameId: number, team: Team): GoalAction {
+    let firstDetectionTime = 0;
+    let secondDetectionTime = 0;
     return (err, _value) => {
       if (err) {
         throw err;
       }
-      if (this.game && this.game.status === GameStatus.INPROCESS) {
-        const score = this.game.scoreGoal(team);
-
-        this.logger.info(`GAME[${this.game.id}] SCORE: [${team}] - ${score}`);
-
-        if (score >= this.gameRules.goalsToWin) {
-          this.game.status = GameStatus.FINISHED;
-          this.statsService.sendStats(this.game.showStats());
-          this.gameOver();
-        } else {
-          this.statsService.sendStats(this.game.showStats());
+      if (firstDetectionTime) {
+        secondDetectionTime = Date.now();
+        if (secondDetectionTime - firstDetectionTime > 10) {
+          firstDetectionTime = 0;
+          if (this.game && this.game.id === gameId && this.game.status === GameStatus.INPROCESS) {
+            const score = this.game.scoreGoal(team);
+  
+            this.logger.info(`GAME[${gameId}] SCORE: [${team}] - ${score}`);
+  
+            if (score >= this.gameRules.goalsToWin) {
+              this.game.status = GameStatus.FINISHED;
+              this.statsService.sendStats(this.game.showStats());
+              this.gameOver();
+            } else {
+              this.statsService.sendStats(this.game.showStats());
+            }
+          } else {
+            this.logger.warn(`GAME[${gameId}] Not counted goal by ${team} team!`);
+          }
         }
       } else {
-        this.logger.warn(`Not counted goal by ${team} team!`);
+        firstDetectionTime = Date.now();
       }
     };
   }
