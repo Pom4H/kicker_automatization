@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "start": "bin/environment node dist/app.js | pino-pretty -c -t",
-    "start-dev": "bin/environment node_modules/.bin/nodemon dist/app.js | pino-pretty -c -t",
+    "start-dev": "KICKER_ENV=dev node_modules/.bin/nodemon dist/app.js",
     "compile": "rm -rf dist && ./node_modules/.bin/tsc",
     "compile-dev": "rm -rf dist && ./node_modules/.bin/tsc --watch",
     "tslint": "./node_modules/.bin/tslint 'src/**/*.ts'",
