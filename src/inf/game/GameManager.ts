@@ -10,7 +10,7 @@ import { StatsServiceWrapper } from '../../inf/wrappers/StatsServiceWrapper';
 import { GoalAction } from './GoalAction';
 import { RedGates, BlackGates } from './Gates';
 
-import { Game, GameStatus, GameRules, Team } from '../../domain/game';
+import { Game, GameStatus, GameRules, Team, GameStats, Goal } from '../../domain/game';
 import { GameIsAlreadyExistError, GameIsNotExistError, GameIsNotOverError } from '../../domain/error';
 
 class GameManager {
@@ -26,6 +26,13 @@ class GameManager {
   constructor() {
     this.statsService = new StatsServiceWrapper();
     this.gameRules = { goalsToWin: 10 };
+  }
+
+  public async init() {
+    const gameState = await this.statsService.getGameState();
+    if (gameState) {
+      this.restoreGameState(gameState);
+    }
   }
 
   public createNewGame(gameId: number, gameRules: GameRules): void | never {
@@ -110,6 +117,20 @@ class GameManager {
       this.logger.info(`Game: ${this.game.id} is over!`);
       delete this.game;
     }
+  }
+
+  private restoreGameState(gameState: GameStats): void {
+    const { id, goals } = gameState;
+
+    const redGoals = goals.filter(goal => goal.team === Team.RED);
+    const blackGoals = goals.filter(goal => goal.team === Team.BLACK);
+
+    const goalsMap: Map<Team, Goal[]> = new Map();
+    goalsMap.set(Team.RED, redGoals);
+    goalsMap.set(Team.BLACK, blackGoals);
+
+    const gates = this.spawnGates();
+    this.game = new Game(id, gates, goalsMap);
   }
 }
 

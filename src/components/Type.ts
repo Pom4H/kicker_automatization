@@ -5,4 +5,5 @@ export const Type = {
   EnvironmentChecker: Symbol('EnvironmentChecker'),
 
   SensorService: Symbol('SensorService'),
+  GameManager: Symbol('GameManager')
 };

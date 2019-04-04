@@ -23,7 +23,7 @@ class RestClient {
      * @param {object} query
      * @returns {Promise<Response>}
      */
-  public async get<Response>(url: string, query: object): Promise<Response> {
+  public async get<Response>(url: string, query: object = {}): Promise<Response> {
     const q: any = {};
     for (const param in query) {
       const value: any = (query as any)[param];
