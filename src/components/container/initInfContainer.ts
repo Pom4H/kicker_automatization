@@ -21,8 +21,6 @@ export async function initInfContainer(container: Container, options: { envName:
     .bind<IServiceDiscovery>(Type.ServiceDiscovery)
     .toConstantValue(new ServiceDiscovery(configFactory.create(ServicesConfig) as any));
 
-  
-
   envChecker.isProd() ?
   container
     .bind<ISensorService>(Type.SensorService)

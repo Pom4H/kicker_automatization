@@ -1,6 +1,5 @@
 import { bindMainComponents, di } from '@framework';
-import { initInfContainer } from './components/container';
-import { initGameManager } from './components/container/initGameManager';
+import { initInfContainer, initGameManager } from './components/container';
 
 export async function initContainer(): Promise<void> {
   const options = { envName: 'KICKER_ENV', baseDir: __dirname };
