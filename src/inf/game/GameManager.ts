@@ -34,7 +34,7 @@ class GameManager {
       this.restoreGameState(gameState);
       this.logger.info(`game with id ${gameState.id} restored`);
     }
-
+    this.logger.info(`no games with status inprocess`);
     return this;
   }
 
