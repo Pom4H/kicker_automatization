@@ -3,7 +3,6 @@
     {
       "name": "kicker",
       "script": "dist/app.js",
-      "args": "~/.yarn/bin/pino-pretty -t -c",
       "env": {
         "NODE_ENV": "dev",
         "KICKER_ENV": "dev"
