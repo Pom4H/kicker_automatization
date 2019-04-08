@@ -90,7 +90,10 @@ class GameManager {
       }
       if (firstDetectionTime) {
         secondDetectionTime = Date.now();
+        this.logger.warn(`firstDetectionTime: ${firstDetectionTime}`);
         if (secondDetectionTime - firstDetectionTime > 10) {
+          this.logger.warn(`secondDetectionTime: ${secondDetectionTime}`);
+          this.logger.warn(`ms: ${secondDetectionTime - firstDetectionTime}`);
           firstDetectionTime = 0;
           if (this.game && this.game.id === gameId && this.game.status === GameStatus.INPROCESS) {
             const score = this.game.scoreGoal(team);
