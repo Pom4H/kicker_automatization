@@ -33,8 +33,9 @@ class GameManager {
     if (gameState && gameState.status === GameStatus.INPROCESS) {
       this.restoreGameState(gameState);
       this.logger.info(`game with id ${gameState.id} restored`);
+    } else {
+      this.logger.info('no games with status inprocess');
     }
-    this.logger.info(`no games with status inprocess`);
     return this;
   }
 
@@ -146,6 +147,7 @@ class GameManager {
     gates[1].watch(this.makeGoalHandler(id, Team.RED));
     
     this.game = new Game(id, gates, goalsMap);
+    this.logger.info(this.game);
   }
 }
 
