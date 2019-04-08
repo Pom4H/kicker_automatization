@@ -6,11 +6,12 @@ import { RedGates, BlackGates } from '../../inf/game/Gates';
 
 class Game {
   public readonly id: number;
-  private readonly goals: Map<Team, Goal[]>;
+  private goals: Map<Team, Goal[]>;
   private _status: GameStatus;
   private gates: [RedGates, BlackGates];
 
   constructor(id: number, gates: [RedGates, BlackGates], goals?: Map<Team, Goal[]>) {
+    console.log('ГОЛЫ', goals);
     this.id = id;
     this.gates = gates;
     this.goals = goals || new Map<Team, Goal[]>();
