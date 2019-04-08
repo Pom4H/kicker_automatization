@@ -85,10 +85,11 @@ class GameManager {
   private makeGoalHandler(gameId: number, team: Team): GoalAction {
     let firstDetectionTime = 0;
     let secondDetectionTime = 0;
-    return (err, _value) => {
+    return (err, value) => {
       if (err) {
         throw err;
       }
+      this.logger.info(value.toString());
       if (firstDetectionTime) {
         secondDetectionTime = Date.now();
         this.logger.warn(`secondDetectionTime: ${secondDetectionTime}`);
