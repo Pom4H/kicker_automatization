@@ -90,16 +90,17 @@ class GameManager {
       }
       if (firstDetectionTime) {
         secondDetectionTime = Date.now();
-        this.logger.warn(`firstDetectionTime: ${firstDetectionTime}`);
-        if (secondDetectionTime - firstDetectionTime > 10) {
-          this.logger.warn(`secondDetectionTime: ${secondDetectionTime}`);
-          this.logger.warn(`ms: ${secondDetectionTime - firstDetectionTime}`);
-          firstDetectionTime = 0;
+        this.logger.warn(`secondDetectionTime: ${secondDetectionTime}`);
+        
+        if (secondDetectionTime - firstDetectionTime > 150) {
+          firstDetectionTime = secondDetectionTime;
+          this.logger.error(`ms > 150: ${secondDetectionTime - firstDetectionTime}`);
+        } else if (secondDetectionTime - firstDetectionTime > 10) {
+          this.logger.warn(`ms > 10: ${secondDetectionTime - firstDetectionTime}`);
+          
           if (this.game && this.game.id === gameId && this.game.status === GameStatus.INPROCESS) {
             const score = this.game.scoreGoal(team);
-  
             this.logger.info(`GAME[${gameId}] SCORE: [${team}] - ${score}`);
-  
             if (score >= this.gameRules.goalsToWin) {
               this.game.status = GameStatus.FINISHED;
               this.statsService.sendStats(this.game.showStats());
@@ -107,12 +108,16 @@ class GameManager {
             } else {
               this.statsService.sendStats(this.game.showStats());
             }
+            
+            firstDetectionTime = 0;
+            secondDetectionTime = 0;
           } else {
             this.logger.warn(`GAME[${gameId}] Not counted goal by ${team} team!`);
           }
-        }
+        }  
       } else {
         firstDetectionTime = Date.now();
+        this.logger.warn(`firstDetectionTime: ${firstDetectionTime}`);
       }
     };
   }
