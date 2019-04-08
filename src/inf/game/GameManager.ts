@@ -132,6 +132,7 @@ class GameManager {
   }
 
   private restoreGameState(gameState: GameStats): void {
+    this.logger.info(gameState);
     const { id, goals } = gameState;
 
     const redGoals = goals.filter(goal => goal.team === Team.RED);
