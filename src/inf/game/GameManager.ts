@@ -93,8 +93,8 @@ class GameManager {
         this.logger.warn(`secondDetectionTime: ${secondDetectionTime}`);
         
         if (secondDetectionTime - firstDetectionTime > 150) {
-          firstDetectionTime = secondDetectionTime;
           this.logger.error(`ms > 150: ${secondDetectionTime - firstDetectionTime}`);
+          firstDetectionTime = secondDetectionTime;
         } else if (secondDetectionTime - firstDetectionTime > 10) {
           this.logger.warn(`ms > 10: ${secondDetectionTime - firstDetectionTime}`);
           
