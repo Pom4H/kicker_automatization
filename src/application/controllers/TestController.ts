@@ -4,7 +4,7 @@ import { Type } from '@diType';
 import { Logger } from 'pino';
 
 import { DummySensorService } from '../../inf/sensor/DummySensorService';
-import { Point } from '../../inf/point/point';
+import { Point } from '../../inf/point/Point';
 
 @JsonController('/test/api')
 export class UserActivityController {

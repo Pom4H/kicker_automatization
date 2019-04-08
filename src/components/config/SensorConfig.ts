@@ -3,6 +3,12 @@ import { IsNumber, IsString, IsBoolean, IsArray, IsNotEmpty, IsIn, ValidateNeste
 import { Direction, Edge, Options } from 'onoff';
 
 class SensorListConfig extends Config {
+  @IsNumber()
+  public minDetectionTime!: number;
+  
+  @IsNumber()
+  public maxDetectionTime!: number;
+
   @IsArray()
   @ValidateNested({ each: true })
   public sensors!: SensorConfig[];

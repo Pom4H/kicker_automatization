@@ -2,15 +2,14 @@ import { di } from '@framework';
 import { Type } from '@diType';
 import { Logger } from 'pino';
 
-import { Point } from '../point/point';
+import { Point } from '../point/Point';
 
-import { ISensorService } from '../../inf/sensor/ISensorService';
-import { StatsServiceWrapper } from '../../inf/wrappers/StatsServiceWrapper';
+import { ISensorService } from '../sensor/ISensorService';
+import { StatsServiceWrapper } from '../wrappers/StatsServiceWrapper';
 
-import { GoalAction } from './GoalAction';
 import { RedGates, BlackGates } from './Gates';
 
-import { Game, GameStatus, GameRules, Team, GameStats, Goal } from '../../domain/game';
+import { Game, GameRules, GameStats, GameStatus, Goal, Team } from '../../domain/game';
 import { GameIsAlreadyExistError, GameIsNotExistError, GameIsNotOverError } from '../../domain/error';
 
 class GameManager {
@@ -49,11 +48,11 @@ class GameManager {
     if (gameRules) {
       this.gameRules = gameRules;
     }
-    
+
     const gates = this.spawnGates();
-    
-    gates[0].watch(this.makeGoalHandler(gameId, Team.BLACK));
-    gates[1].watch(this.makeGoalHandler(gameId, Team.RED));
+
+    gates[0].watch(this.sensorService.createSensorHandler(this.makeGoalHandler(gameId, Team.BLACK)));
+    gates[1].watch(this.sensorService.createSensorHandler(this.makeGoalHandler(gameId, Team.RED)));
 
     this.game = new Game(gameId, gates);
 
@@ -76,62 +75,6 @@ class GameManager {
     }
   }
 
-  private spawnGates(): [RedGates, BlackGates] {
-    const redGates = this.sensorService.createSensor(Point.RED_GATES);
-    const blackGates = this.sensorService.createSensor(Point.BLACK_GATES);
-    return [redGates, blackGates];
-  }
-
-  private makeGoalHandler(gameId: number, team: Team): GoalAction {
-    let firstDetectionTime = 0;
-    let secondDetectionTime = 0;
-    return (err, value) => {
-      if (err) {
-        throw err;
-      }
-      this.logger.info(value.toString());
-      if (firstDetectionTime) {
-        secondDetectionTime = Date.now();
-        this.logger.warn(`secondDetectionTime: ${secondDetectionTime}`);
-        
-        if (secondDetectionTime - firstDetectionTime > 250) {
-          this.logger.error(`ms > 250: ${secondDetectionTime - firstDetectionTime}`);
-          firstDetectionTime = secondDetectionTime;
-        } else if (secondDetectionTime - firstDetectionTime > 10) {
-          this.logger.warn(`ms > 10: ${secondDetectionTime - firstDetectionTime}`);
-          
-          if (this.game && this.game.id === gameId && this.game.status === GameStatus.INPROCESS) {
-            const score = this.game.scoreGoal(team);
-            this.logger.info(`GAME[${gameId}] SCORE: [${team}] - ${score}`);
-            if (score >= this.gameRules.goalsToWin) {
-              this.game.status = GameStatus.FINISHED;
-              this.statsService.sendStats(this.game.showStats());
-              this.gameOver();
-            } else {
-              this.statsService.sendStats(this.game.showStats());
-            }
-            
-            firstDetectionTime = 0;
-            secondDetectionTime = 0;
-          } else {
-            this.logger.warn(`GAME[${gameId}] Not counted goal by ${team} team!`);
-          }
-        }  
-      } else {
-        firstDetectionTime = Date.now();
-        this.logger.warn(`firstDetectionTime: ${firstDetectionTime}`);
-      }
-    };
-  }
-
-  private gameOver() {
-    if (this.game) {
-      this.game.unwatch();
-      this.logger.info(`Game: ${this.game.id} is over!`);
-      delete this.game;
-    }
-  }
-
   private restoreGameState(gameState: GameStats): void {
     this.logger.info(gameState);
     const { id, goals } = gameState;
@@ -144,12 +87,47 @@ class GameManager {
     goalsMap.set(Team.BLACK, blackGoals);
 
     const gates = this.spawnGates();
-    
-    gates[0].watch(this.makeGoalHandler(id, Team.BLACK));
-    gates[1].watch(this.makeGoalHandler(id, Team.RED));
-    
+
+    gates[0].watch(this.sensorService.createSensorHandler(this.makeGoalHandler(id, Team.BLACK)));
+    gates[1].watch(this.sensorService.createSensorHandler(this.makeGoalHandler(id, Team.RED)));
+
     this.game = new Game(id, gates, goalsMap);
-    this.logger.info(this.game);
+  }
+
+  private spawnGates(): [RedGates, BlackGates] {
+    const redGates = this.sensorService.createSensor(Point.RED_GATES);
+    const blackGates = this.sensorService.createSensor(Point.BLACK_GATES);
+    return [redGates, blackGates];
+  }
+
+  private makeGoalHandler(gameId: number, team: Team): void | never {
+    if (
+      this.game &&
+      this.game.id === gameId &&
+      this.game.status === GameStatus.INPROCESS
+    ) {
+      const score = this.game.scoreGoal(team);
+
+      this.logger.info(`GAME[${gameId}] SCORE: [${team}] - ${score}`);
+
+      if (score >= this.gameRules.goalsToWin) {
+        this.game.status = GameStatus.FINISHED;
+        this.statsService.sendStats(this.game.showStats());
+        this.gameOver();
+      } else {
+        this.statsService.sendStats(this.game.showStats());
+      }
+    } else {
+      this.logger.warn(`GAME[${gameId}] Not counted goal by ${team} team!`);
+    }
+  }
+
+  private gameOver() {
+    if (this.game) {
+      this.game.unwatch();
+      this.logger.info(`Game[${this.game.id}] IS OVER!`);
+      delete this.game;
+    }
   }
 }
 

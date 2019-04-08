@@ -1,4 +1,6 @@
-import { GoalAction } from './GoalAction';
+import { ValueCallback } from 'onoff';
+
+type GoalAction = ValueCallback;
 
 interface Gates {
   watch(action: GoalAction): void;
@@ -7,7 +9,6 @@ interface Gates {
 }
 
 interface RedGates extends Gates {}
-
 interface BlackGates extends Gates {}
 
 export { RedGates, BlackGates };

@@ -1,4 +1,6 @@
 {
+  "minDetectionTime": 20,
+  "maxDetectionTime": 250,
   "sensors": [
     {
       "point": "RED_GATES",

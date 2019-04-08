@@ -1,6 +1,6 @@
 import { ISensorService } from './ISensorService';
 import { Sensor } from './Sensor';
-import { Point } from '../../inf/point/point';
+import { Point } from '../point/Point';
 import { DummySensor } from './DummySensor';
 
 class DummySensorService implements ISensorService {
@@ -27,6 +27,8 @@ class DummySensorService implements ISensorService {
       }, 20);
     }
   }
+
+  public createSensorHandler(): any {}
 }
 
 export { DummySensorService };
