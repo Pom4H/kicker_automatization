@@ -26,7 +26,7 @@
       "pre-setup": "echo 'PRE SETUP'",
       "post-setup": "echo 'POST SETUP'",
       "pre-deploy-local": "yarn compile && rm dist.tar.gz && tar czfP dist.tar.gz dist && scp dist.tar.gz pi@observer.lan:~/projects/kicker_automatization/current",
-      "post-deploy": "rm -rf ./dist && tar -xzvf dist.tar.gz && yarn install && pm2 start ecosystem.json --env prod && rm dist.tar.gz"
+      "post-deploy": "rm -rf ./dist && tar -xzf dist.tar.gz && yarn install && pm2 start ecosystem.json --env prod && rm dist.tar.gz"
     }
   }
 }
