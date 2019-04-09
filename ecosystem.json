@@ -25,8 +25,8 @@
       "path": "/home/pi/projects/kicker_automatization",
       "pre-setup": "echo 'PRE SETUP'",
       "post-setup": "echo 'POST SETUP'",
-      "pre-deploy-local": "echo 'This is a local executed command'",
-      "post-deploy": "yarn && yarn compile && pm2 start ecosystem.json --env prod"
+      "pre-deploy-local": "yarn compile && rm dist.tar.gz && tar czfP dist.tar.gz dist && scp dist.tar.gz pi@observer.lan:~/projects/kicker_automatization/current",
+      "post-deploy": "tar -xzvf dist.tar.gz && yarn install && pm2 start ecosystem.json --env prod"
     }
   }
 }
