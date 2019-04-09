@@ -24,7 +24,7 @@ class SensorService implements ISensorService {
     return sensor; 
   }
 
-  public createSensorHandler(callback: any): ValueCallback {
+  public createSensorHandler(callback: Function): ValueCallback {
     let firstDetectionTime: number;
     let secondDetectionTime: number;
     return (err, value) => {
