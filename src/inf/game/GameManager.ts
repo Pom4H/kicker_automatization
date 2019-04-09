@@ -88,8 +88,8 @@ class GameManager {
 
     const gates = this.spawnGates();
 
-    gates[0].watch(this.sensorService.createSensorHandler(this.makeGoalHandler(id, Team.BLACK)));
-    gates[1].watch(this.sensorService.createSensorHandler(this.makeGoalHandler(id, Team.RED)));
+    gates[0].watch(this.sensorService.createSensorHandler(this.makeGoalHandler.bind(this, id, Team.BLACK)));
+    gates[1].watch(this.sensorService.createSensorHandler(this.makeGoalHandler.bind(this, id, Team.RED)));
 
     this.game = new Game(id, gates, goalsMap);
   }
