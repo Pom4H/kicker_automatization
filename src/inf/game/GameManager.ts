@@ -51,8 +51,8 @@ class GameManager {
 
     const gates = this.spawnGates();
 
-    gates[0].watch(this.sensorService.createSensorHandler(this.makeGoalHandler(gameId, Team.BLACK)));
-    gates[1].watch(this.sensorService.createSensorHandler(this.makeGoalHandler(gameId, Team.RED)));
+    gates[0].watch(this.sensorService.createSensorHandler(this.makeGoalHandler.bind(this, gameId, Team.BLACK)));
+    gates[1].watch(this.sensorService.createSensorHandler(this.makeGoalHandler.bind(this, gameId, Team.BLACK)));
 
     this.game = new Game(gameId, gates);
 
@@ -77,7 +77,7 @@ class GameManager {
 
   private restoreGameState(gameState: GameStats): void {
     this.logger.info(gameState);
-    const { id, goals } = gameState;
+    const { id: gameId, goals } = gameState;
 
     const redGoals = goals.filter(goal => goal.team === Team.RED);
     const blackGoals = goals.filter(goal => goal.team === Team.BLACK);
@@ -88,10 +88,10 @@ class GameManager {
 
     const gates = this.spawnGates();
 
-    gates[0].watch(this.sensorService.createSensorHandler(this.makeGoalHandler.bind(this, id, Team.BLACK)));
-    gates[1].watch(this.sensorService.createSensorHandler(this.makeGoalHandler.bind(this, id, Team.RED)));
+    gates[0].watch(this.sensorService.createSensorHandler(this.makeGoalHandler.bind(this, gameId, Team.BLACK)));
+    gates[1].watch(this.sensorService.createSensorHandler(this.makeGoalHandler.bind(this, gameId, Team.RED)));
 
-    this.game = new Game(id, gates, goalsMap);
+    this.game = new Game(gameId, gates, goalsMap);
   }
 
   private spawnGates(): [RedGates, BlackGates] {
