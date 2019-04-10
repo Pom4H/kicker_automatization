@@ -6,6 +6,7 @@ import { Logger } from 'pino';
 import { Sensor } from './Sensor';
 import { SensorConfig, SensorListConfig } from '@config';
 import { ISensorService } from './ISensorService';
+import { Point } from '../../inf/point/Point';
 
 class SensorService implements ISensorService {
 
@@ -16,7 +17,7 @@ class SensorService implements ISensorService {
     this.sensorListConfig = sensorListConfig;
   }
 
-  public createSensor(point: string): Sensor {
+  public createSensor(point: Point): Sensor {
     const sensorConfig = this.getSensorConfig(point);
     const { gpio, direction, edge, options } = sensorConfig;
     const sensor = new Gpio(gpio, direction, edge, options);

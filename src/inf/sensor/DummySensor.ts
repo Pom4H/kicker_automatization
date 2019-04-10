@@ -1,10 +1,10 @@
 import { Sensor } from './Sensor';
 
 class DummySensor implements Sensor {
-  public listener: any;
+  public listener?: Function;
 
-  public watch(callback: any): void {
-    this.listener = callback;
+  public watch(callback: Function): void {
+    this.listener = callback();
   }
 
   public unwatch(): void {
@@ -16,7 +16,9 @@ class DummySensor implements Sensor {
   }
 
   public call(): void {
-    this.listener();
+    if (this.listener) {
+      this.listener();
+    }
   }
 }
 
