@@ -7,7 +7,17 @@ export class StatsServiceWrapper extends ServiceWrapper {
   }
 
   public async sendStats(gameStats: GameStats): Promise<void> {
-    await this.put('/game', { ...gameStats });
+    await this.trySendStats(gameStats);
+  }
+
+  protected async trySendStats(gameStats: GameStats): Promise<void> {
+    try {
+      await this.put('/game', { ...gameStats });
+    } catch (error) {
+      if (error.code === 'EAI_AGAIN') {
+        await this.trySendStats(gameStats);
+      }
+    }
   }
 
   protected get serviceName(): string {
