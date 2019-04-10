@@ -18,17 +18,12 @@ class DummySensorService implements ISensorService {
 
   public callPoint(point: Point) {
     const sensor: any = this.sensorMap.get(point);
-
-    if (sensor && sensor.listener) {
-      sensor.call();
-
-      setTimeout(() => {
-        sensor.call();
-      }, 20);
-    }
+    sensor && sensor.call();
   }
 
-  public createSensorHandler(): any {}
+  public createSensorHandler(callback: Function): any {
+    return () => callback;
+  }
 }
 
 export { DummySensorService };
